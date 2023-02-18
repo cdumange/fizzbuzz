@@ -1,5 +1,5 @@
-import { FizzbuzzResponse, FizzbuzzRequest } from "../app/models/fizzbuzz";
-import { Either, makeError, makeValue } from "../app/models/either";
+import { FizzbuzzResponse, FizzbuzzRequest } from "../models/fizzbuzz";
+import { Either, makeError, makeValue } from "../models/either";
 
 export function FizzBuzz (input: FizzbuzzRequest) : Either<FizzbuzzResponse, FizzBuzzErrors> {
     const valid = validateInput(input)
