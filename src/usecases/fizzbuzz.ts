@@ -1,6 +1,13 @@
 import { FizzbuzzResponse, FizzbuzzRequest } from "../models/fizzbuzz";
 import { Either, makeError, makeValue } from "../models/either";
 
+export type FizzBuzzErrors = 
+    | "INTs can't be <= 0"
+    | "limit is too great"
+
+const MAX_LIMIT = 100000
+
+
 export function FizzBuzz (input: FizzbuzzRequest) : Either<FizzbuzzResponse, FizzBuzzErrors> {
     const valid = validateInput(input)
     if(valid != null) {
@@ -38,13 +45,6 @@ function doFizzbuzz (input : FizzbuzzRequest) : FizzbuzzResponse {
         result: ret
     }
 }
-
-export type FizzBuzzErrors = 
-    | "INTs can't be <= 0"
-    | "limit is too great"
-
-const MAX_LIMIT = 100000
-
 
 function validateInput(input : FizzbuzzRequest) : null | FizzBuzzErrors {
     

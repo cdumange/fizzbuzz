@@ -41,5 +41,5 @@ export function eitherValue<T, K>(either: Either<T, K>) : T|K {
         return either.value as NonNullable<T>
     }
 
-    throw new Error("something weird arrived with " + JSON.stringify(either))
+    throw new Error("something weird happened with " + JSON.stringify(either))
 }
