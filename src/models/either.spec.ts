@@ -1,4 +1,4 @@
-import { Either, makeError, makeValue, isError, isValue, eitherValue } from "./either";
+import { makeError, makeValue, isError, isValue, eitherValue } from "./either";
 
 describe('test either', () =>  {
     test("value", () => {
