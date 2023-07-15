@@ -1,7 +1,5 @@
-import { FizzbuzzResponse, FizzbuzzRequest } from "../models/fizzbuzz";
+import { FizzbuzzResponse, FizzbuzzRequest, FizzBuzzErrors } from "../models/fizzbuzz";
 import { Either, makeError, makeValue } from "../models/either";
-
-export type FizzBuzzErrors = "INTs can't be <= 0" | "limit is too great";
 
 const MAX_LIMIT = 100000;
 

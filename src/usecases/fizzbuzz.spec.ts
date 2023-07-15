@@ -1,6 +1,6 @@
 import { eitherValue, isError } from "../models/either";
-import { FizzbuzzResponse } from "../models/fizzbuzz";
-import { FizzBuzz, FizzBuzzErrors } from "./fizzbuzz";
+import { FizzbuzzResponse, FizzBuzzErrors } from "../models/fizzbuzz";
+import { FizzBuzz } from "./fizzbuzz";
 
 describe("fizzbuzz", () => {
   describe("ok cases", () => {

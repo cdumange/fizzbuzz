@@ -9,3 +9,5 @@ export type FizzbuzzRequest = {
 export type FizzbuzzResponse = {
   result: string[];
 };
+
+export type FizzBuzzErrors = "INTs can't be <= 0" | "limit is too great";
