@@ -1,15 +1,14 @@
-import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser'
+import * as Koa from "koa";
+import * as bodyParser from "koa-bodyparser";
 
-import { registerFizzbuzz } from "../routing/fizzbuzz"
-import { FizzBuzz } from "../usecases/fizzbuzz"
+import { registerFizzbuzz } from "../routing/fizzbuzz";
+import { FizzBuzz } from "../usecases/fizzbuzz/fizzbuzz";
 
+const app: Koa = new Koa();
+app.use(bodyParser());
 
-const app:Koa = new Koa();
-app.use(bodyParser())
+registerFizzbuzz(app, FizzBuzz);
 
-registerFizzbuzz(app, FizzBuzz)
-
-app.on('error', console.error);
+app.on("error", console.error);
 
 export default app;
