@@ -1,5 +1,5 @@
-import { eitherValue, isError } from "../models/either";
-import { FizzbuzzResponse, FizzBuzzErrors } from "../models/fizzbuzz";
+import { eitherValue, isError } from "../../models/either";
+import { FizzbuzzResponse, FizzBuzzErrors } from "../../models/fizzbuzz";
 import { FizzBuzz } from "./fizzbuzz";
 
 describe("fizzbuzz", () => {

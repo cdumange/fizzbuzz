@@ -1,5 +1,9 @@
-import { FizzbuzzResponse, FizzbuzzRequest, FizzBuzzErrors } from "../models/fizzbuzz";
-import { Either, makeError, makeValue } from "../models/either";
+import {
+  FizzbuzzResponse,
+  FizzbuzzRequest,
+  FizzBuzzErrors,
+} from "../../models/fizzbuzz";
+import { Either, makeError, makeValue } from "../../models/either";
 
 const MAX_LIMIT = 100000;
 
