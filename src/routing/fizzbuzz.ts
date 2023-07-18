@@ -13,18 +13,12 @@ export function registerFizzbuzz(api : Koa, fizzbuzz: functionFizzbuzz) {
         prefix: '/fizzbuzz',
     });
 
-    router.get('/', async (ctx: Koa.Context) : Promise<void> => {
-        ctx.body = 'it works!'
-    })
-
     router.post('/', async (ctx: Koa.Context) : Promise<void> => {
         const request = ctx.request.body as FizzbuzzRequest
-        console.log("body value", request)
         const resp = fizzbuzz(request)
 
         if (isError(resp)) {
             ctx.response.status = HttpStatus.StatusCodes.INTERNAL_SERVER_ERROR
-            console.log(resp.error)
             return
         }
 
