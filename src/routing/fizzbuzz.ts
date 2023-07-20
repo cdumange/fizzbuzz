@@ -8,30 +8,50 @@ import {
   FizzBuzzErrors,
 } from "../models/fizzbuzz";
 
-import * as HttpStatus from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
+import { StatManager } from "../usecases/stats";
 
 type functionFizzbuzz = (
   input: FizzbuzzRequest,
 ) => Either<FizzbuzzResponse, FizzBuzzErrors>;
 
-export function registerFizzbuzz(api: Koa, fizzbuzz: functionFizzbuzz) {
+export function registerFizzbuzz(
+  api: Koa,
+  fizzbuzz: functionFizzbuzz,
+  statManager: StatManager,
+) {
   const router: Router = new Router({
     prefix: "/fizzbuzz",
   });
 
-  router.post("/", async (ctx: Koa.Context): Promise<void> => {
+  const statMiddleware = generateStatMiddleware(statManager);
+
+  router.post("/", statMiddleware, async (ctx: Koa.Context): Promise<void> => {
     const request = ctx.request.body as FizzbuzzRequest;
     const resp = fizzbuzz(request);
 
     if (isError(resp)) {
-      ctx.response.status = HttpStatus.StatusCodes.INTERNAL_SERVER_ERROR;
+      ctx.response.status = StatusCodes.INTERNAL_SERVER_ERROR;
       return;
     }
 
-    ctx.response.status = HttpStatus.StatusCodes.OK;
+    ctx.response.status = StatusCodes.OK;
     ctx.response.body = resp.value;
   });
 
   api.use(router.routes());
   api.use(router.allowedMethods());
+}
+
+function generateStatMiddleware(statManager: StatManager) {
+  return async (ctx: Koa.Context, next: Koa.Next) => {
+    await next();
+
+    if (
+      ctx.response.status == StatusCodes.OK &&
+      ctx.request.body !== undefined
+    ) {
+      await statManager.Increment(ctx.request.body as FizzbuzzRequest);
+    }
+  };
 }
