@@ -1,3 +1,2 @@
-import { StatManager } from "./common";
-
-export { StatManager };
+export { StatManager } from "./common";
+export { InMemoryStatManager } from "./inmemory";

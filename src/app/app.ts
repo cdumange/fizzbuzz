@@ -3,11 +3,13 @@ import * as bodyParser from "koa-bodyparser";
 
 import { registerFizzbuzz } from "../routing/fizzbuzz";
 import { FizzBuzz } from "../usecases/fizzbuzz/fizzbuzz";
+import { InMemoryStatManager } from "../usecases/stats";
 
 const app: Koa = new Koa();
 app.use(bodyParser());
 
-registerFizzbuzz(app, FizzBuzz);
+const statManager = new InMemoryStatManager();
+registerFizzbuzz(app, FizzBuzz, statManager);
 
 app.on("error", console.error);
 

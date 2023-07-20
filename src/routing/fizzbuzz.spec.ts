@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import * as Koa from "koa";
 import { registerFizzbuzz } from "./fizzbuzz";
 import {
@@ -8,11 +9,16 @@ import {
 import { Either } from "../models/either";
 import * as request from "supertest";
 import { StatusCodes } from "http-status-codes";
+import * as bodyParser from "koa-bodyparser";
 
+import * as TypeMoq from "typemoq";
+import { StatManager } from "../usecases/stats";
 describe("test fizzbuzz endpoint", () => {
   describe("post", () => {
     it("200", async () => {
       const api = new Koa();
+      api.use(bodyParser());
+
       const input: FizzbuzzRequest = {
         int1: 3,
         int2: 5,
@@ -25,9 +31,9 @@ describe("test fizzbuzz endpoint", () => {
       };
 
       const mockFizz = (
-        input: FizzbuzzRequest,
+        i: FizzbuzzRequest,
       ): Either<FizzbuzzResponse, FizzBuzzErrors> => {
-        if (input === input) {
+        if (_.isEqual(i, input)) {
           return { value: expected };
         }
 
@@ -36,17 +42,26 @@ describe("test fizzbuzz endpoint", () => {
         };
       };
 
-      registerFizzbuzz(api, mockFizz);
+      const mockStat = TypeMoq.Mock.ofType<StatManager>();
+
+      registerFizzbuzz(api, mockFizz, mockStat.object);
 
       const res = await request(api.callback())
         .post("/fizzbuzz")
         .send(input)
         .expect(StatusCodes.OK);
       expect(res.body as FizzbuzzResponse).toStrictEqual(expected);
+
+      mockStat.verify(
+        (x) => x.Increment(TypeMoq.It.is((y) => _.isEqual(y, input))),
+        TypeMoq.Times.once(),
+      );
     });
 
     it("500", async () => {
       const api = new Koa();
+      api.use(bodyParser());
+
       const input: FizzbuzzRequest = {
         int1: 3,
         int2: 5,
@@ -63,12 +78,16 @@ describe("test fizzbuzz endpoint", () => {
         };
       };
 
-      registerFizzbuzz(api, mockFizz);
+      const mockStat = TypeMoq.Mock.ofType<StatManager>();
+
+      registerFizzbuzz(api, mockFizz, mockStat.object);
 
       const res = await request(api.callback())
         .post("/fizzbuzz")
         .send(input)
         .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+
+      mockStat.verify((x) => x.Increment, TypeMoq.Times.never());
     });
   });
 });
