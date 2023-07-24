@@ -18,10 +18,10 @@ module.exports = {
         allowNamedExports: false,
       },
     ],
-    "arrow-body-style": ["error", "always"],
+    "arrow-body-style": ["warn", "as-needed"],
     camelcase: ["error", { properties: "always" }],
     complexity: ["error", { max: 10 }],
     curly: ["error", "multi-line"],
   },
-  ignorePatterns: ["*.spec.ts"],
+  ignorePatterns: ["**/node_modules/*", "**/dist/*", "**/*.spec.ts"],
 };
