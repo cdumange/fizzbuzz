@@ -11,7 +11,7 @@ import {
 import { StatusCodes } from "http-status-codes";
 import { StatManager } from "../usecases/stats";
 
-type functionFizzbuzz = (
+export type functionFizzbuzz = (
   input: FizzbuzzRequest,
 ) => Either<FizzbuzzResponse, FizzBuzzErrors>;
 

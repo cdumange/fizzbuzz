@@ -1,6 +1,5 @@
 import * as _ from "lodash";
-import * as Koa from "koa";
-import { registerFizzbuzz } from "./fizzbuzz";
+import { functionFizzbuzz, registerFizzbuzz } from "./fizzbuzz";
 import {
   FizzBuzzErrors,
   FizzbuzzRequest,
@@ -9,15 +8,22 @@ import {
 import { Either } from "../models/either";
 import * as request from "supertest";
 import { StatusCodes } from "http-status-codes";
-import * as bodyParser from "koa-bodyparser";
 
 import * as TypeMoq from "typemoq";
 import { StatManager } from "../usecases/stats";
+import * as Koa from "koa";
+import * as bodyParser from "koa-bodyparser";
+
+export function getTestKoa(): Koa {
+  const api = new Koa();
+  api.use(bodyParser());
+  return api;
+}
+
 describe("test fizzbuzz endpoint", () => {
   describe("post", () => {
     it("200", async () => {
-      const api = new Koa();
-      api.use(bodyParser());
+      const api = getTestKoa();
 
       const input: FizzbuzzRequest = {
         int1: 3,
@@ -59,8 +65,7 @@ describe("test fizzbuzz endpoint", () => {
     });
 
     it("500", async () => {
-      const api = new Koa();
-      api.use(bodyParser());
+      const api = getTestKoa();
 
       const input: FizzbuzzRequest = {
         int1: 3,
@@ -70,9 +75,10 @@ describe("test fizzbuzz endpoint", () => {
         limit: 10,
       };
 
-      const mockFizz = (
-        input: FizzbuzzRequest,
-      ): Either<FizzbuzzResponse, FizzBuzzErrors> => {
+      const mockFizz: functionFizzbuzz = (): Either<
+        FizzbuzzResponse,
+        FizzBuzzErrors
+      > => {
         return {
           error: "limit is too great",
         };
@@ -82,7 +88,7 @@ describe("test fizzbuzz endpoint", () => {
 
       registerFizzbuzz(api, mockFizz, mockStat.object);
 
-      const res = await request(api.callback())
+      await request(api.callback())
         .post("/fizzbuzz")
         .send(input)
         .expect(StatusCodes.INTERNAL_SERVER_ERROR);

@@ -2,7 +2,7 @@ import { FizzBuzz, Stats, Either, makeError, makeValue } from "../../models";
 import { StatManager } from "./common";
 
 export class InMemoryStatManager implements StatManager {
-  private stats: Map<FizzBuzz.FizzbuzzRequest, Stats.RequestStat>;
+  private stats: Map<string, Stats.RequestStat>;
   private max: number = 0;
   private maxRequest?: FizzBuzz.FizzbuzzRequest;
 
@@ -11,7 +11,8 @@ export class InMemoryStatManager implements StatManager {
   }
 
   public Increment(request: FizzBuzz.FizzbuzzRequest): Promise<void> {
-    let s = this.stats.get(request);
+    const req = JSON.stringify(request);
+    let s = this.stats.get(req);
     if (s === undefined) {
       s = {
         request: request,
@@ -26,10 +27,10 @@ export class InMemoryStatManager implements StatManager {
       this.maxRequest = s.request;
     }
 
-    this.stats.set(request, s);
+    this.stats.set(req, s);
 
     return new Promise((resolve) => {
-      resolve(null);
+      resolve();
     });
   }
 
@@ -37,7 +38,7 @@ export class InMemoryStatManager implements StatManager {
     request: FizzBuzz.FizzbuzzRequest,
   ): Promise<Either<Stats.RequestStat, Stats.ErrGetMostUsed>> {
     return new Promise((resolve) => {
-      const s = this.stats.get(request);
+      const s = this.stats.get(JSON.stringify(request));
 
       if (s === undefined) {
         resolve(makeError("no stat set"));
@@ -58,7 +59,7 @@ export class InMemoryStatManager implements StatManager {
           return;
         }
 
-        const stat = this.stats.get(this.maxRequest);
+        const stat = this.stats.get(JSON.stringify(this.maxRequest));
         resolve(makeValue(JSON.parse(JSON.stringify(stat))));
       },
     );
