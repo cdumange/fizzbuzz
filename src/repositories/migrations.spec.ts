@@ -1,4 +1,4 @@
-import { knex } from "knex";
+import { knex, Knex } from "knex";
 import { FizzStats } from "./FizzStats";
 import { EnsureDB } from "./migrations";
 
@@ -7,7 +7,7 @@ const default_host = "localhost";
 const default_username = "postgres";
 const default_db = "public";
 
-describe("test migrations", () => {
+export const getTestConnection = (): Knex => {
   const host = process.env.DB_HOST || default_host;
   const conn = knex({
     client: "pg",
@@ -18,6 +18,11 @@ describe("test migrations", () => {
       database: default_db,
     },
   });
+  return conn;
+};
+
+describe("test migrations", () => {
+  const conn = getTestConnection();
   beforeEach(async () => {
     await conn.schema.dropTableIfExists(FizzStats.TableName);
   });

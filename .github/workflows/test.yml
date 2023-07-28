@@ -9,4 +9,4 @@ jobs:
         node-version: [16.x, 18.x]
     steps:
       - uses: actions/checkout@v3
-      - run: docker compose -f test.docker-compose.yml up --abort-on-container-exit
+      - run: npm run test-docker
