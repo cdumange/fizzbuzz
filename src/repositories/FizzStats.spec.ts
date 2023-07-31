@@ -1,3 +1,4 @@
+import { isError } from "../models";
 import { RequestStat } from "../models/Stats";
 import { FizzbuzzRequest } from "../models/fizzbuzz";
 import { FizzStats } from "./FizzStats";
@@ -11,10 +12,6 @@ describe("test FizzStats DAO", () => {
     beforeEach(async () => {
       await EnsureDB(conn);
       await conn(FizzStats.TableName).delete();
-    });
-
-    afterAll(async () => {
-      await conn.destroy();
     });
 
     it("test different", async () => {
@@ -64,5 +61,24 @@ describe("test FizzStats DAO", () => {
       expect(res.length).toStrictEqual(1);
       expect(res[0].count).toStrictEqual(6);
     });
+  });
+
+  describe("test GetMostUsed", () => {
+    beforeEach(async () => {
+      await EnsureDB(conn);
+      await conn(FizzStats.TableName).delete();
+    });
+
+    it("no lines", async () => {
+      const s = new FizzStats(conn);
+      const res = await s.GetMostUsed();
+
+      expect(isError(res));
+      expect(res.error).toBe("no stat set");
+    });
+  });
+
+  afterAll(async () => {
+    await conn.destroy();
   });
 });
