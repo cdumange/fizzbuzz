@@ -27,7 +27,7 @@ describe("test migrations", () => {
     await conn.schema.dropTableIfExists(FizzStats.TableName);
   });
 
-  it("FizzStats", async () => {
+  test("FizzStats", async () => {
     const fizz = new FizzStats(conn);
     await fizz.Migrate();
 
@@ -36,7 +36,7 @@ describe("test migrations", () => {
     await conn.select("*").from(FizzStats.TableName);
   });
 
-  it("global", async () => {
+  test("global", async () => {
     await EnsureDB(conn);
     await conn.select("*").from(FizzStats.TableName);
   });
