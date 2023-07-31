@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest -c jest.config.ts",
     "test-docker": "docker compose -f test.docker-compose.yml up --abort-on-container-exit --build",
     "lint": "npx eslint .",
     "build": "tsc --project src/tsconfig.json",
     "serve": "ts-node src/server.ts",
     "start": "nodemon"
   },
-  "author": "",
+  "author": "cdumange",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.3",

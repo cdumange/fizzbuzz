@@ -14,7 +14,7 @@ describe("test FizzStats DAO", () => {
       await conn(FizzStats.TableName).delete();
     });
 
-    it("test different", async () => {
+    test("test different", async () => {
       const s = new FizzStats(conn);
       const req1: FizzbuzzRequest = {
         int1: 0,
@@ -41,7 +41,7 @@ describe("test FizzStats DAO", () => {
       expect(res[0].count).toStrictEqual(1);
     });
 
-    it("two times the same", async () => {
+    test("two times the same", async () => {
       const s = new FizzStats(conn);
       const req1: FizzbuzzRequest = {
         int1: 0,
@@ -69,7 +69,7 @@ describe("test FizzStats DAO", () => {
       await conn(FizzStats.TableName).delete();
     });
 
-    it("no lines", async () => {
+    test("no lines", async () => {
       const s = new FizzStats(conn);
       const res = await s.GetMostUsed();
 

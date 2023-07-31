@@ -3,7 +3,12 @@ import { Migration } from "./migrations";
 import { ErrGetMostUsed, RequestStat } from "../models/Stats";
 import { Either, makeError, makeValue } from "../models";
 
-export class FizzStats implements Migration {
+export interface FizzStatsRepository {
+  UpsertRequest(stat: RequestStat): Promise<void>;
+  GetMostUsed(): Promise<Either<RequestStat, ErrGetMostUsed>>;
+}
+
+export class FizzStats implements Migration, FizzStatsRepository {
   private db: Knex;
   public static readonly TableName = "fizz_stats";
 
